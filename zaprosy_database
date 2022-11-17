@@ -1,0 +1,182 @@
+1
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic, metayev_gender.name, metayev_otdel.name 
+FROM metayev_user
+JOIN metayev_gender ON metayev_gender.gender_id = metayev_user.gender_id
+JOIN metayev_teacher ON metayev_teacher.user_id = metayev_user.user_id
+JOIN metayev_otdel ON metayev_teacher.otdel_id = metayev_otdel.otdel_id
+WHERE metayev_otdel.name = 'Информационные системы'
+
+2 
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic, metayev_gruppa.name, metayev_special.name 
+FROM metayev_user
+JOIN metayev_student ON metayev_student.user_id = metayev_user.user_id
+JOIN metayev_gruppa ON metayev_gruppa.gruppa_id = metayev_student.gruppa_id
+JOIN metayev_special ON metayev_special.special_id =metayev_gruppa.special_id
+WHERE metayev_special.otdel_id = 1
+
+3
+SELECT metayev_course.name, metayev_course.hours, metayev_special.name 
+FROM metayev_course
+JOIN metayev_special ON metayev_special.special_id = metayev_course.special_id
+WHERE metayev_special.otdel_id = 3
+
+4
+SELECT name, date_begin, date_end 
+FROM metayev_gruppa
+WHERE metayev_gruppa.special_id = 1 
+
+5
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic, metayev_gruppa.name 
+FROM metayev_gruppa
+JOIN metayev_student ON metayev_student.gruppa_id = metayev_gruppa.gruppa_id
+JOIN metayev_user ON metayev_user.user_id = metayev_student.user_id
+JOIN metayev_special ON metayev_special.special_id = metayev_gruppa.special_id
+JOIN metayev_course ON metayev_course.special_id = metayev_special.special_id
+WHERE metayev_course.name = 'Мультимедиа технология'
+
+6 
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic, metayev_course.name, metayev_course.hours, metayev_gruppa.name
+FROM metayev_user 
+JOIN metayev_teacher ON metayev_user.user_id = metayev_teacher.user_id
+JOIN metayev_graduate ON metayev_graduate.user_id = metayev_teacher.user_id
+JOIN metayev_gruppa ON metayev_gruppa.gruppa_id = metayev_graduate.gruppa_id
+JOIN metayev_course ON metayev_course.course_id = metayev_graduate.course_id
+JOIN metayev_graduate_time ON metayev_graduate_time.graduate_id = metayev_graduate.graduate_id
+JOIN metayev_lesson_num ON metayev_lesson_num.lesson_num_id = metayev_graduate_time.lesson_num_id
+WHERE metayev_lesson_num.time_lesson BETWEEN '08:30:00' AND '15:00:00';
+
+7
+SELECT COUNT(*), metayev_otdel.name 
+FROM metayev_otdel
+JOIN metayev_special ON metayev_special.otdel_id = metayev_otdel.otdel_id
+JOIN metayev_gruppa ON metayev_gruppa.special_id = metayev_special.special_id
+LEFT OUTER JOIN metayev_graduate ON metayev_graduate.gruppa_id = metayev_gruppa.gruppa_id
+GROUP BY metayev_otdel.name
+
+8
+SELECT COUNT(*), metayev_otdel.name 
+FROM metayev_otdel
+JOIN metayev_special ON metayev_special.otdel_id = metayev_otdel.otdel_id
+JOIN metayev_course ON metayev_special.special_id = metayev_course.special_id
+GROUP BY metayev_otdel.otdel_id
+
+9
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic 
+FROM metayev_teacher
+JOIN metayev_user ON metayev_user.user_id = metayev_teacher.user_id
+LEFT OUTER JOIN metayev_graduate ON metayev_graduate.user_id = metayev_teacher.user_id
+WHERE metayev_graduate.user_id IS null
+
+10
+SELECT metayev_course.name 
+FROM metayev_course
+LEFT OUTER JOIN metayev_graduate ON metayev_graduate.course_id = metayev_course.course_id
+WHERE metayev_graduate.course_id IS null
+
+11
+SELECT metayev_special.name 
+FROM metayev_special 
+LEFT OUTER JOIN metayev_course ON metayev_course.special_id = metayev_special.special_id
+WHERE metayev_course.special_id IS null
+
+12
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic 
+FROM metayev_user 
+JOIN metayev_student ON metayev_user.user_id=metayev_student.user_id
+JOIN metayev_gender ON metayev_user.gender_id=metayev_gender.gender_id 
+JOIN metayev_gruppa ON metayev_student.gruppa_id=metayev_gruppa.gruppa_id
+JOIN metayev_graduate ON metayev_graduate.gruppa_id=metayev_gruppa.gruppa_id
+JOIN metayev_graduate_time ON metayev_graduate.graduate_id=metayev_graduate_time.graduate_id
+JOIN metayev_lesson_num ON metayev_graduate_time.lesson_num_id=metayev_lesson_num.lesson_num_id
+WHERE metayev_lesson_num.time_lesson BETWEEN '10:30:00' AND '18:30:00' AND metayev_gender.gender_id=2
+
+13
+SELECT metayev_course.name, metayev_lesson_num.name 
+FROM metayev_course 
+JOIN metayev_graduate ON metayev_course.course_id=metayev_graduate.course_id
+JOIN metayev_graduate_time ON metayev_graduate.graduate_id=metayev_graduate_time.graduate_id
+JOIN metayev_lesson_num ON metayev_graduate_time.lesson_num_id=metayev_lesson_num.lesson_num_id 
+WHERE metayev_lesson_num.time_lesson BETWEEN '12:30:00' AND '18:30:00'
+
+14
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic 
+FROM metayev_student
+JOIN metayev_user ON metayev_user.user_id = metayev_student.user_id
+JOIN metayev_gruppa ON metayev_student.gruppa_id = metayev_gruppa.gruppa_id
+JOIN metayev_graduate ON metayev_graduate.gruppa_id = metayev_gruppa.gruppa_id
+JOIN metayev_graduate_time ON metayev_graduate_time.graduate_id = metayev_graduate.graduate_id
+JOIN metayev_day ON metayev_day.day_id = metayev_graduate_time.day_id
+WHERE metayev_day.name = 'Пятница'
+
+15
+SELECT metayev_day.name 
+FROM metayev_day
+LEFT OUTER JOIN metayev_graduate_time ON metayev_graduate_time.day_id = metayev_day.day_id
+WHERE metayev_graduate_time.day_id IS null
+
+16
+SELECT metayev_special.name 
+FROM metayev_special
+JOIN metayev_course ON metayev_course.special_id = metayev_special.special_id
+JOIN metayev_graduate ON metayev_graduate.course_id = metayev_course.course_id
+JOIN metayev_graduate_time ON metayev_graduate_time.graduate_id = metayev_graduate.graduate_id
+JOIN metayev_day ON metayev_day.day_id = metayev_graduate_time.day_id
+WHERE metayev_day.name = 'Среда'
+
+17
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic, metayev_otdel.name 
+FROM metayev_teacher
+JOIN metayev_user ON metayev_user.user_id = metayev_teacher.user_id
+JOIN metayev_otdel ON metayev_otdel.otdel_id = metayev_teacher.otdel_id
+JOIN metayev_graduate ON metayev_graduate.user_id = metayev_teacher.user_id
+JOIN metayev_graduate_time ON metayev_graduate_time.graduate_id = metayev_graduate.graduate_id
+JOIN metayev_day ON metayev_day.day_id = metayev_graduate_time.day_id
+WHERE metayev_day.name = 'Пятница'
+
+18
+SELECT metayev_user.lastname, metayev_user.firstname, metayev_user.patronomic, metayev_gruppa.name, metayev_special.name 
+FROM metayev_student 
+JOIN metayev_user ON metayev_student.user_id=metayev_user.user_id
+JOIN metayev_gruppa ON metayev_student.gruppa_id=metayev_gruppa.gruppa_id
+JOIN metayev_special ON metayev_gruppa.special_id=metayev_special.special_id
+JOIN metayev_graduate ON metayev_gruppa.gruppa_id=metayev_graduate.gruppa_id
+JOIN metayev_course ON metayev_graduate.course_id=metayev_course.course_id
+WHERE metayev_course.hours>12
+
+19
+SELECT metayev_course.name, metayev_course.hours, metayev_special.name 
+FROM metayev_course
+JOIN metayev_special ON metayev_special.special_id = metayev_course.special_id
+JOIN metayev_otdel ON metayev_otdel.otdel_id = metayev_special.otdel_id
+JOIN metayev_graduate ON metayev_graduate.course_id = metayev_course.course_id
+JOIN metayev_graduate_time ON metayev_graduate.graduate_id = metayev_graduate_time.graduate_id
+JOIN metayev_day ON metayev_day.day_id = metayev_graduate_time.day_id
+WHERE metayev_otdel.name = 'Технические специальности' AND metayev_day.name = 'Среда' OR metayev_day.name = 'Пятница'
+
+20
+SELECT metayev_otdel.name 
+FROM metayev_otdel 
+JOIN metayev_teacher ON metayev_otdel.otdel_id=metayev_teacher.otdel_id
+JOIN metayev_graduate ON metayev_teacher.user_id=metayev_graduate.user_id
+JOIN metayev_graduate_time ON metayev_graduate.graduate_id=metayev_graduate_time.graduate_id
+JOIN metayev_lesson_num ON metayev_graduate_time.lesson_num_id=metayev_lesson_num.lesson_num_id
+JOIN metayev_day ON metayev_graduate_time.day_id=metayev_day.day_id
+WHERE metayev_lesson_num.time_lesson BETWEEN '09:00:00' AND '12:00:00' AND metayev_day.day_id=2
+
+21
+SELECT metayev_day.name, COUNT(*) 
+FROM metayev_day
+JOIN metayev_graduate_time ON metayev_graduate_time.day_id = metayev_day.day_id
+JOIN metayev_graduate ON metayev_graduate.graduate_id = metayev_graduate_time.graduate_id
+JOIN metayev_course ON metayev_graduate.course_id = metayev_course.course_id
+GROUP BY metayev_course.course_id, metayev_day.name
+
+22
+SELECT metayev_special.name, metayev_lesson_num.name, metayev_day.name 
+FROM metayev_special 
+JOIN metayev_course ON metayev_special.special_id=metayev_course.special_id
+JOIN metayev_graduate ON metayev_course.course_id=metayev_graduate.course_id
+JOIN metayev_graduate_time ON metayev_graduate.graduate_id=metayev_graduate_time.graduate_id
+JOIN metayev_lesson_num ON metayev_graduate_time.lesson_num_id=metayev_lesson_num.lesson_num_id 
+JOIN metayev_day ON metayev_graduate_time.day_id=metayev_day.day_id
+WHERE metayev_lesson_num.time_lesson BETWEEN '15:00:00' AND '18:00:00' AND metayev_day.day_id BETWEEN 4 AND 6
